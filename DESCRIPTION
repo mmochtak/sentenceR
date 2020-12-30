@@ -1,0 +1,19 @@
+Package: sentenceR
+Title: Langauge-agnostic setence tokenizer with UDPipe back end
+Version: 0.0.1
+Authors@R: 
+    person(given = "Michal",
+           family = "Mochtak",
+           role = c("aut", "cre"),
+           email = "mochtak@gmail.com",
+           comment = c(ORCID = "0000-0001-5598-5642"))
+Description: sentenceR is a language agnostic utility designed for sentence tokenization of a raw text. Using the UDPipe POS tagging pipeline, the package automatically extracts sentences with their appropriate indexes. The package works with any of the 100+ language models natively provided by UDPipe package (see https://github.com/bnosac/udpipe).
+License: `use_mit_license()`
+Imports:
+	udpipe (>= 0.8.3),
+	magrittr (>= 1.5),
+	stringr (>= 1.4.0)
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.1.9000
