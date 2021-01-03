@@ -22,7 +22,8 @@ The package contains three general functions: *get_sentences*; *sent_ngrams*; *s
 ```
 library(sentenceR)
 sample_text <- c("This is sentence number one. This is sentence number two. This is sentence number three.", "This is sentence number four. This is sentence number five. This is sentence number six.")
-get_sentences(text = sample_text, language = "english", lem = TRUE)
+
+get_sentences(text = sample_text, language = "english", lem = TRUE, verbose = TRUE)
 
   doc_id paragraph_id sentence_id                       sentence                   sentence_lem
 1      1            1           1   This is sentence number one.   this be sentence number one.
@@ -34,10 +35,12 @@ get_sentences(text = sample_text, language = "english", lem = TRUE)
 ```
 
 -	*sent_ngrams* is a simple function that takes the result of *get_sentences* (a data frame) and creates higher sentence n-grams based on a specified *n*.
+
 ```
 library(sentenceR)
 sample_text <- c("This is sentence number one. This is sentence number two. This is sentence number three.", "This is sentence number four. This is sentence number five. This is sentence number six.")
-result <- get_sentences(text = sample_text, language = "english", lem = TRUE)
+
+result <- get_sentences(text = sample_text, language = "english", lem = TRUE, verbose = TRUE)
 sent_ngrams(sentences = result, n = 2)
 
   doc_id ngram_id                                                       ngram
@@ -48,10 +51,12 @@ sent_ngrams(sentences = result, n = 2)
 ```
 
 -	*sent_ngrams_lem* is an equivalent to *sent_ngrams* but instead of regular sentences their lemmatized version are taken as an input (column sentence_lem must exist in the get_sentences data frame).
+
 ```
 library(sentenceR)
 sample_text <- c("This is sentence number one. This is sentence number two. This is sentence number three.", "This is sentence number four. This is sentence number five. This is sentence number six.")
-result <- get_sentences(text = sample_text, language = "english", lem = TRUE)
+
+result <- get_sentences(text = sample_text, language = "english", lem = TRUE, verbose = TRUE)
 sent_ngrams_lem(sentences = result, n = 2)
 
   doc_id ngram_id                                                       ngram
@@ -62,6 +67,6 @@ sent_ngrams_lem(sentences = result, n = 2)
 ```
 
 ## Final Remarks
-The package has been developed as a practice for me as I wanted to learn how to create packages to better organize my code. However, it might be useful for anybody working on NLP tasks requiring sentence tokenization and lemmatization in languages other than English. I know the approach is not the most efficient in terms of speed and accuracy but it is very versatile when it comes to languages that can be processed out of the box. Regarding accuracy, it is important to stress that sentence tokenization is based on accuracy of language models and may differ among models. Although I’ve never planned to submit it to CRAN, I am planning to maintain it as long as it is still useful via GitHub. Feel free to contact me if standard GitHub channels are not suitable for you via my [personal website](https://mochtak.com/). If used, please cite it as:
+The package has been developed as a practice for me as I wanted to learn how to create packages to better organize my code. However, it might be useful for anybody working on NLP tasks requiring sentence tokenization and lemmatization in languages other than English. I know the approach is not the most efficient in terms of speed and accuracy but it is very versatile when it comes to languages that can be processed out of the box (for a slightly extended tutorial see [my blog](https://mmochtak.github.io/sentenceR/)). Regarding accuracy, it is important to stress that sentence tokenization is based on accuracy of language models and may differ among models. Although I’ve never planned to submit it to CRAN, I am planning to maintain it as long as it is still useful via GitHub. Feel free to contact me if standard GitHub channels are not suitable for you via my [personal website](https://mochtak.com/). If used, please cite it as:
 
 > Mochtak, Michal (2021): *sentenceR*: Language-Agnostic Sentence Tokenization for Low-Resourced Languages. URL: https://github.com/mmochtak/sentenceR/
