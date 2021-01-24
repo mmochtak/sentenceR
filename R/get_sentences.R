@@ -7,14 +7,15 @@
 #' @param remove_no Logical parameter for removing numbers. Default is FALSE.
 #' @param remove_punct Logical parameter for removing punctuation. Default is FALSE.
 #' @param tolower Logical parameter for transforming strings to lower case. Default is FALSE.
-#' @param verbose Logical parameter for displaying extended information on processed data. Default is FALSE.
+#' @param verbose Logical parameter for displaying extended information on processed data. Works only with processing on one core. Default is FALSE.
+#' @param n_cores Numeric parameter for number of cores to be used for processing. Default is 1 core.
 #' @keywords tokenization sentence language agnostic
 #' @export
 #' @examples
 #' get_sentences()
 
 get_sentences <- function (text, language, lem = FALSE, remove_no = FALSE, remove_punct = FALSE,
-                           tolower = FALSE, verbose = FALSE) {
+                           tolower = FALSE, verbose = FALSE, n_cores = 1) {
   if (isFALSE(isTRUE(class(text) == "character"))) stop("Text input must be a character vector.")
   if (isFALSE(class(language) == "character")) stop("Language input must be a string referring to a UDPipe langauge model; see list of models at https://github.com/bnosac/udpipe, section 'Pre-trained models'.")
   if (isFALSE(class(lem) == "logical")) stop("'lem' input must be of class 'logical'.")
@@ -22,6 +23,7 @@ get_sentences <- function (text, language, lem = FALSE, remove_no = FALSE, remov
   if (isFALSE(class(remove_punct) == "logical")) stop("'remove_punct' input must be of class 'logical'.")
   if (isFALSE(class(tolower) == "logical")) stop("'tolower' input must be of class 'logical'.")
   if (isFALSE(class(verbose) == "logical")) stop("'verbose' input must be of class 'logical'.")
+  if (isFALSE(class(n_cores) == "numeric")) stop("'n_cores' input must be of class 'numeric'.")
 
   # text annotation
   model_exist <- stringr::str_detect(list.files("./"), pattern = paste0("^", language, "-")) %>%
@@ -32,10 +34,10 @@ get_sentences <- function (text, language, lem = FALSE, remove_no = FALSE, remov
   if (length(model_exist) == 0) {
     model <- udpipe::udpipe_download_model(language = language)
     annotated_text <- udpipe::udpipe(udpipe::udpipe_load_model(file = model$file_model),
-                                     x = text, trace = verbose)
+                                     x = text, trace = verbose, parallel.cores = n_cores)
   } else {
     annotated_text <- udpipe::udpipe(udpipe::udpipe_load_model(list.files("./")[model_exist]),
-                                     x = text, trace = verbose)
+                                     x = text, trace = verbose, parallel.cores = n_cores)
   }
 
   annotated_text$doc_id <- gsub("doc", "", annotated_text$doc_id)

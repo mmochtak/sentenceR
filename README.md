@@ -17,7 +17,7 @@ devtools::install_github('mmochtak/sentenceR')
 ## Usage
 The package contains three general functions: *get_sentences*; *sent_ngrams*; *sent_ngrams_lem*
 
--	*get_sentences* is a general function for extraction sentences from raw text. The main input is a string vector. The only other required argument is the language model (here, for simplicity, “english”). Additionally, if needed the output can be further cleaned off of numbers (add argument *remove_no = TRUE*) and punctuation (add argument *remove_punct = TRUE*), all characters can be transformed to lower cases (add argument *tolower = TRUE*), as well as the outcome sentence can be accompanied by its lemmatized version (add argument *lem = TRUE*; see example below). By default, all available cores are used for the processing.
+-	*get_sentences* is a general function for extraction sentences from raw text. The main input is a string vector. The only other required argument is the language model (here, for simplicity, “english”). Additionally, if needed the output can be further cleaned off of numbers (add argument *remove_no = TRUE*) and punctuation (add argument *remove_punct = TRUE*), all characters can be transformed to lower cases (add argument *tolower = TRUE*), as well as the outcome sentence can be accompanied by its lemmatized version (add argument *lem = TRUE*; see example below). By default, only 1 core is used for the processing. If more cores are available, parallelization can be initialized with *n_cores* argument (e.g. *n_cores = 4* will use four cores).
 
 ```
 library(sentenceR)

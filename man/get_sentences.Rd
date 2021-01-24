@@ -11,7 +11,8 @@ get_sentences(
   remove_no = FALSE,
   remove_punct = FALSE,
   tolower = FALSE,
-  verbose = FALSE
+  verbose = FALSE,
+  n_cores = 1
 )
 }
 \arguments{
@@ -27,7 +28,9 @@ get_sentences(
 
 \item{tolower}{Logical parameter for transforming strings to lower case. Default is FALSE.}
 
-\item{verbose}{Logical parameter for displaying extended information on processed data. Default is FALSE.}
+\item{verbose}{Logical parameter for displaying extended information on processed data. Works only with processing on one core. Default is FALSE.}
+
+\item{n_cores}{Numeric parameter for number of cores to be used for processing. Default is 1 core.}
 }
 \description{
 This function allows tokenizing text on the level of sentences.
