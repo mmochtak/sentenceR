@@ -80,12 +80,6 @@ get_sentences <- function (text, language, lem = FALSE, remove_no = FALSE, remov
     sentences <- sentences[,-5]
   }
 
-  if (lem == TRUE) {
-    sentences <- cbind(sentences, sentence_lem = sentences_lem$sentence_lem)
-  }
-
-  # assign class 'sentenceR_df' so other functions can check for it
-  class(sentences) <- append(class(sentences), 'sentenceR_df')
   cat("\nDone!")
   return(sentences)
 }

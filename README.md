@@ -12,7 +12,7 @@ Install the package from the GitHub repository:
 devtools::install_github('mmochtak/sentenceR')
 ```
 ## Version History
-0.0.2 significant speed improvement (latest release)
+0.0.2 significant speed improvement (latest release)\n
 0.0.1 original version
 
 ## Usage

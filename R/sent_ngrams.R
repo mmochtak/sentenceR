@@ -9,7 +9,7 @@
 #' sent_ngrams()
 
 sent_ngrams <- function(sentences, n) {
-  if (isFALSE("sentenceR_df" %in% class(sentences))) stop("Data input 'sentences' must be a data frame of class 'sentenceR_df' returned by function 'get_sentences()'.")
+  if (isFALSE("grouped_df" %in% class(sentences))) stop("Data input 'sentences' must be a data frame of class 'grouped_df' returned by function 'get_sentences()'.")
   if (isFALSE(is.numeric(n) & n == round(n) & length(n) == 1 & n > 0)) stop("Need to specify a proper number of higher n-grams: 'n' must be a non-negative integer.")
 
   ids <- unique(sentences$doc_id)
