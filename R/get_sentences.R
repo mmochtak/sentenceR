@@ -40,58 +40,51 @@ get_sentences <- function (text, language, lem = FALSE, remove_no = FALSE, remov
                                      x = text, trace = verbose, parallel.cores = n_cores)
   }
 
-  annotated_text$doc_id <- gsub("doc", "", annotated_text$doc_id)
-  annotated_text$d_s_id <- paste0(annotated_text$doc_id, "_", annotated_text$sentence_id)
-  unique_id <- unique(annotated_text$d_s_id)
+  annotated_text$doc_id <- gsub("doc", "", annotated_text$doc_id) %>% as.numeric()
 
   cat("Collecting extracted sentences...")
 
   # extract sentences (orig and lem)
-  sentences <- c()
-  sentences_lem <- c()
-  for (id in unique_id) {
-    sentence <- subset(annotated_text, d_s_id == id)[1, 1:4]
-    sentences <- rbind(sentences, sentence)
-    rownames(sentences) <- NULL
-    if (tolower == TRUE) {
-      sentences$sentence <- tolower(sentences$sentence)
-    }
-    if (remove_no == TRUE) {
-      sentences$sentence <- stringr::str_remove_all(sentences$sentence, pattern = "[:digit:]") %>%
-        stringr::str_squish() %>%
-        stringr::str_replace_all(., pattern = "( )([:punct:])", replacement =  "\\2")
-    }
-    if (remove_punct == TRUE) {
-      sentences$sentence <- stringr::str_remove_all(sentences$sentence, pattern = "[:punct:]") %>%
-        stringr::str_squish()
-    }
-    if (lem == TRUE) {
-      sentence_lem0 <- subset(annotated_text, d_s_id == id)[,c(1:3, 10)]
-      sentence_lem <- cbind(doc_id = sentence_lem0$doc_id[1],
-                            paragpraph_id = sentence_lem0$paragraph_id[1],
-                            sentence_id = sentence_lem0$sentence_id[1],
-                            sentence_lem = paste0(sentence_lem0$lemma, collapse = " ") %>%
-                              stringr::str_replace_all(., pattern = "( )([:punct:])", replacement =  "\\2"))
-      sentences_lem <- as.data.frame(rbind(sentences_lem, sentence_lem))
+  sentences <- annotated_text %>%
+                dplyr::group_by(doc_id, paragraph_id, sentence_id) %>%
+                dplyr::summarise(sentence = sentence[1], sentence_lem = paste(lemma, collapse = " "))
 
-      if (tolower == TRUE) {
-        sentences_lem$sentence_lem <- tolower(sentences_lem$sentence_lem)
-      }
-      if (remove_no == TRUE) {
-        sentences_lem$sentence_lem <- stringr::str_remove_all(sentences_lem$sentence_lem, pattern = "[:digit:]") %>%
-          stringr::str_squish() %>%
-          stringr::str_replace_all(., pattern = "( )([:punct:])", replacement =  "\\2")
-      }
-      if (remove_punct == TRUE) {
-        sentences_lem$sentence_lem <- stringr::str_remove_all(sentences_lem$sentence_lem, pattern = "[:punct:]") %>%
-          stringr::str_squish()
-      }
-    }
+  # fix lem punctuation
+  sentences$sentence_lem <- sentences$sentence_lem %>%
+                            stringr::str_replace_all(pattern = "( )([:punct:] )", replacement = "\\2") %>%
+                            stringr::str_replace_all(pattern = "( )([:punct:]$)", replacement = "\\2") %>%
+                            stringr::str_replace_all(pattern = "\\( ", replacement = " \\(")
+
+  # apply user-defined settings
+  if (tolower == TRUE) {
+    sentences$sentence <- tolower(sentences$sentence)
+    sentences$sentence_lem <- tolower(sentences$sentence_lem)
   }
+  if (remove_no == TRUE) {
+    sentences$sentence <- stringr::str_remove_all(sentences$sentence, pattern = "[:digit:]") %>%
+                          stringr::str_squish() %>%
+                          stringr::str_replace_all(., pattern = "( )([:punct:])", replacement =  "\\2")
+
+    sentences$sentence_lem <- stringr::str_remove_all(sentences$sentence_lem, pattern = "[:digit:]") %>%
+                              stringr::str_squish() %>%
+                              stringr::str_replace_all(., pattern = "( )([:punct:])", replacement =  "\\2")
+  }
+  if (remove_punct == TRUE) {
+    sentences$sentence <- stringr::str_remove_all(sentences$sentence, pattern = "[:punct:]") %>%
+                          stringr::str_squish()
+    sentences$sentence_lem <- stringr::str_remove_all(sentences$sentence_lem, pattern = "[:punct:]") %>%
+                              stringr::str_squish()
+  }
+
+  if (lem != TRUE) {
+    sentences <- sentences[,-5]
+  }
+
   if (lem == TRUE) {
     sentences <- cbind(sentences, sentence_lem = sentences_lem$sentence_lem)
   }
-  sentences$doc_id <- as.integer(sentences$doc_id)
+
+  # assign class 'sentenceR_df' so other functions can check for it
   class(sentences) <- append(class(sentences), 'sentenceR_df')
   cat("\nDone!")
   return(sentences)

@@ -11,8 +11,9 @@ Install the package from the GitHub repository:
 ```
 devtools::install_github('mmochtak/sentenceR')
 ```
-## Current Version
-0.0.1
+## Version History
+0.0.2 significant speed improvement (latest release)
+0.0.1 original version
 
 ## Usage
 The package contains three general functions: *get_sentences*; *sent_ngrams*; *sent_ngrams_lem*
