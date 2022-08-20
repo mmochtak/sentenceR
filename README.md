@@ -9,7 +9,7 @@ The package is intended for use especially with non-English languages that are u
 ## Installation Instruction
 Install the package from the GitHub repository:
 ```
-devtools::install_github('mmochtak/sentenceR')
+devtools::install_github('mmochtak/sentenceR', dependencies = TRUE)
 ```
 ## Version
 0.0.2
